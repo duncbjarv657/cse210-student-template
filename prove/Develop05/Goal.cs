@@ -12,9 +12,19 @@ abstract class Goal
     }     
 
     public void DisplayGoal()
+
     {
         Console.WriteLine($"Name: {Name} | Points: {Points}");
     }
 
+    public FileGoal(string name, int points)
+    {
+        
+
+        // varGoal = ({})
+    }
+
     public abstract int CompletedGoal();
+
+    public bool IsCompleted { get; set;}
 }

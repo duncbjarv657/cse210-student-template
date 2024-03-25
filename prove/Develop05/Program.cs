@@ -29,11 +29,11 @@ class Program
                 ListGoals(goals);
                 break;
             case "3":
-                goals.Add(SaveGoals());
-                 break;
-            // case "4":
-            //     goals.Add(LoadGoals());
-            //     break;
+                SaveGoals(goals);
+                break;
+            case "4":
+                LoadGoals();
+                break;
             case "5":
                 totalPoints += RecordEvent(goals);
                 break;
@@ -81,77 +81,38 @@ class Program
         }
         }
 
-   static void SaveGoals(List<Goal> goals)
-   {
-      Console.WriteLine("Enter the file name to save the goals to:");
-       int fileName = int.Parse(Console.ReadLine());
-
+    static void SaveGoals(List<Goal> goals)
+    {
+        Console.WriteLine("Enter the file name to save your goals to:");
+        string fileName = Console.ReadLine();
         try
-      {
-        using (StreamWriter writer = new StreamWriter(fileName))
         {
-            foreach (Goal goal in goals)
-             {
-                 writer.WriteLine($"{goal.Name},{goal.Points},{goal.IsCompleted},{goal.Type}");
-              }
-          }
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                foreach (var goal in goals)
+                {
+                    // Write goal details in CSV format
+                    writer.WriteLine()
+                }
+            }
 
             Console.WriteLine($"Goals have been saved to {fileName}.");
         }
         catch (Exception ex)
-        {            Console.WriteLine($"Error saving goals: {ex.Message}");
+        {
+            Console.WriteLine($"Error saving goals: {ex.Message}");
         }
     }
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-class Program
-{
-    static void Main(string[] args)
+    static string GetGoalType(Goal goal)
     {
-        List<Goal> goals = new List<Goal>();
-        int totalPoints = 0;
-        while (true)
-        {
-            Console.WriteLine("Welcome to Goal Tracker! What goals do you want to work on?");
-            Console.WriteLine("1. Create A New Goal");
-            Console.WriteLine("2. List goals");
-            Console.WriteLine("3. Save Goals");
-            Console.WriteLine("4. Load Goals");
-            Console.WriteLine("5. Record event");
-            Console.WriteLine("6. Quit");
-            Console.Write("Enter your choice human: ");
-
-            string choice = Console.ReadLine();
-            Console.WriteLine();
-
-            switch (choice)
-            {
-                case "1":
-                    goals.Add(CreateGoal());
-                    break;
-                case "2":
-                    ListGoals(goals);
-                    break;
-                case "3":
-                    SaveGoals(goals);
-                    break;
-                case "4":
-                    goals.AddRange(LoadGoals());
-                    break;
-                case "5":
-                    totalPoints += RecordEvent(goals);
-                    break;
-                case "6":
-                    Console.WriteLine("Goodbye!");
-                    return;
-                default:
-                    Console.WriteLine("Invalid choice. Please try again.");
-                    break;
-            }
-        }
+        // Determine the type of goal and return its string representation
+        if (goal is EternalGoal)
+            return "Eternal";
+        else if (goal is ChecklistGoal)
+            return "Checklist";
+        else
+            return "Simple";
     }
 
     // Other methods here...
@@ -210,9 +171,7 @@ class Program
     }
 
     // Other methods here...
-}
-
-static int RecordEvent(List<Goal> goals)
+    static int RecordEvent(List<Goal> goals)
     {
 
         Console.WriteLine("List of Goals:");
@@ -229,7 +188,9 @@ static int RecordEvent(List<Goal> goals)
         var goal = goals [index];
         var points = goal.CompletedGoal();
         return points;
-// //         goal.IsCompleted = true;
-// //         Console.WriteLine($"Progress for goal '{goal.Name}' worth {goal.Points} points recorded on {date}: {description}");
     }
 }
+
+
+// //         goal.IsCompleted = true;
+// //         Console.WriteLine($"Progress for goal '{goal.Name}' worth {goal.Points} points recorded on {date}: {description}");
